@@ -15,9 +15,21 @@ errorarray = m.errorarray(1,2:end);
 COM_x_array = m.COM_x_array(:,2:end);
 COM_vel_x_array = m.COM_vel_x_array(:,2:end);
 COM_acc_x_array = m.COM_acc_x_array(:,2:end);
+
 forcearray = m.forcearray(:, 2:end);
-footy_array = m.footy_array(:, 2:end);
-footvel_array = m.footvel_array(:, 2:end);
+
+COM_y_array = m.COM_y_array(:,2:end);
+COM_vel_y_array = m.COM_vel_y_array(:,2:end);
+COM_acc_y_array = m.COM_acc_y_array(:,2:end);
+
+foot_y_array = m.foot_y_array(:, 2:end);
+foot_y_vel_array = m.foot_y_vel_array(:, 2:end);
+
+foot_x_array = m.foot_x_array(:, 2:end);
+foot_x_vel_array = m.foot_x_vel_array(:, 2:end);
+
+foot_x_acc_array = m.foot_x_acc_array(:, 2:end);
+foot_y_acc_array = m.foot_y_acc_array(:, 2:end);
 
 meanerror = mean(errorarray);
 meanp00 = mean(p00array);
@@ -25,6 +37,6 @@ meanp01 = mean(p01array);
 meanp10 = mean(p10array);
 
 %uncomment to update file
-save('finaldata', 'p00array', 'p01array', 'p10array', 'errorarray', 'COM_x_array', 'COM_vel_x_array', 'COM_acc_x_array', 'forcearray', 'footy_array','footvel_array', '-v7.3');
-save('finaldata', 'meanerror', 'meanp00', 'meanp01', 'meanp10', '-append');
+save('finaldata', 'p00array', 'p01array', 'p10array', 'errorarray', 'COM_x_array', 'COM_vel_x_array', 'COM_acc_x_array', 'forcearray', 'foot_y_array','foot_y_vel_array', '-v7.3');
+save('finaldata', 'meanerror', 'meanp00', 'meanp01', 'meanp10', 'COM_y_array', 'COM_vel_y_array', 'COM_acc_y_array', 'foot_x_array', 'foot_x_vel_array', 'foot_x_acc_array', 'foot_y_acc_array', '-append');
 %whos('-file', 'finaldata.mat')

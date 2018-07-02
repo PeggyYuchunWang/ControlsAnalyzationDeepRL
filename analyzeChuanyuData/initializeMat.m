@@ -12,10 +12,20 @@ COM_x_array = zeros(1001, 1);
 COM_vel_x_array = zeros(1001, 1);
 COM_acc_x_array = zeros(1001, 1);
 
-%record footy position - default [-1.01741148291964], figure out what else
+COM_y_array = zeros(1001, 1);
+COM_vel_y_array = zeros(1001, 1);
+COM_acc_y_array = zeros(1001, 1);
+
+%record footy position
 forcearray = 0;
-footy_array = zeros(1001, 1);
+foot_y_array = zeros(1001, 1);
+foot_x_array = zeros(1001, 1);
+foot_y_vel_array = zeros(1001, 1);
+foot_x_vel_array = zeros(1001, 1);
+foot_y_acc_array = zeros(1001, 1);
+foot_x_acc_array = zeros(1001, 1);
 
 %uncomment to initialize file
-save('fitdata', 'p00array', 'p01array', 'p10array', 'errorarray', 'COM_x_array', 'COM_vel_x_array', 'COM_acc_x_array', 'forcearray', 'footy_array', '-v7.3');
+save('fitdata', 'p00array', 'p01array', 'p10array', 'errorarray', 'COM_x_array', 'COM_vel_x_array', 'COM_acc_x_array', 'forcearray', 'foot_y_array', '-v7.3');
+save('fitdata', 'COM_y_array', 'COM_vel_y_array', 'COM_acc_y_array', 'forcearray', 'foot_x_array', 'foot_y_vel_array', 'foot_x_vel_array','foot_y_acc_array', 'foot_x_acc_array', '-append');
 %whos('-file', 'fitdata.mat')

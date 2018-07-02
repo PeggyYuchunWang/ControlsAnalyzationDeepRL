@@ -21,19 +21,33 @@ COM_x = COM(startPoint:endPoint, 1);
 startingPos = COM_x(1, 1);
 l = length(COM_x);
 
+COM_y = COM(startPoint:endPoint, 2);
+COM_vel_y = COM_vel(startPoint:endPoint, 2);
+
 %zero out starting position
 for a = 1:l
     COM_x(a) = COM_x(a) - startingPos;
 end
 COM_vel_x = COM_vel(startPoint:endPoint, 1);
 
+footy = Feet_pos(startPoint:endPoint, 2);
+footx = Feet_pos(startPoint:endPoint, 1);
+footyvel = Feet_vel(startPoint:endPoint, 2);
+footxvel = Feet_vel(startPoint:endPoint, 1);
+
 COM_acc_x = zeros(l, 1);
+COM_acc_y = zeros(l, 1);
+foot_acc_x = zeros(l, 1);
+foot_acc_y = zeros(l, 1);
 
 dt = 1/500; %time step (double check)
 
 %calculate acceleration by taking velocity/time
 for a = 2:l-1
-    COM_acc_x(a) = (COM_vel_x(a) - COM_vel_x(a-1))/dt ;
+    COM_acc_x(a) = (COM_vel_x(a) - COM_vel_x(a-1))/dt;
+    COM_acc_y(a) = (COM_vel_y(a) - COM_vel_y(a-1))/dt;
+    foot_acc_x(a) = (footxvel(a) - footxvel(a-1))/dt;
+    foot_acc_y(a) = (footyvel(a) - footyvel(a-1))/dt;
 end
 
 %moving avg filter for acc
@@ -41,9 +55,9 @@ windowSize = 20;
 b = (1/windowSize)*ones(1,windowSize);
 c = 1;
 COM_acc_x = filter(b,c,COM_acc_x);
-
-footy = Feet_pos(startPoint:endPoint, 2);
-footvel = Feet_vel(startPoint:endPoint, 2);
+COM_acc_y = filter(b,c,COM_acc_y);
+foot_acc_x = filter(b,c,foot_acc_x);
+foot_acc_y = filter(b,c,foot_acc_y);
 
 %uncomment to show graphs
 % plot3(COM_x, COM_vel_x, COM_acc_x);
@@ -81,24 +95,29 @@ error = totalerror/l;
 
 %uncomment to save to file
 m = matfile('fitdata.mat','Writable',true);
-newp00array = p00;
-newp01array = p01;
-newp10array = p10;
-newerrorarray = error;
 
-p00array = cat(2, m.p00array, newp00array);
-p01array = cat(2, m.p01array, newp01array);
-p10array = cat(2, m.p10array, newp10array);
-errorarray = cat(2, m.errorarray, newerrorarray);
+p00array = cat(2, m.p00array, p00);
+p01array = cat(2, m.p01array, p01);
+p10array = cat(2, m.p10array, p10);
+errorarray = cat(2, m.errorarray, error);
 
 COM_x_array = cat(2, m.COM_x_array, COM_x);
 COM_vel_x_array = cat(2, m.COM_vel_x_array, COM_vel_x);
 COM_acc_x_array = cat(2, m.COM_acc_x_array, COM_acc_x);
 
+COM_y_array = cat(2, m.COM_y_array, COM_y);
+COM_vel_y_array = cat(2, m.COM_vel_y_array, COM_vel_y);
+COM_acc_y_array = cat(2, m.COM_acc_y_array, COM_acc_y);
+
 forcearray = cat(2, m.forcearray, force);
 
-footy_array = cat(2, m.footy_array, footy);
-footvel_array = cat(2, m.footvel_array, footvel);
+foot_y_array = cat(2, m.foot_y_array, footy);
+foot_y_vel_array = cat(2, m.foot_y_vel_array, footyvel);
+foot_x_array = cat(2, m.foot_x_array, footx);
+foot_x_vel_array = cat(2, m.foot_x_vel_array, footxvel);
+foot_x_acc_array = cat(2, m.foot_x_acc_array, foot_acc_x);
+foot_y_acc_array = cat(2, m.foot_y_acc_array, foot_acc_y);
 
-save('fitdata', 'p00array', 'p01array', 'p10array', 'errorarray', 'COM_x_array', 'COM_vel_x_array', 'COM_acc_x_array', 'forcearray','footy_array', 'footvel_array', '-v7.3');
+save('fitdata', 'p00array', 'p01array', 'p10array', 'errorarray', 'COM_x_array', 'COM_vel_x_array', 'COM_acc_x_array', 'forcearray','foot_y_array', 'foot_y_vel_array', '-v7.3');
+save('fitdata', 'COM_y_array', 'COM_vel_y_array', 'COM_acc_y_array', 'foot_x_array', 'foot_x_vel_array', 'foot_x_acc_array', 'foot_y_acc_array', '-append');
 %whos('-file', 'fitdata.mat')
