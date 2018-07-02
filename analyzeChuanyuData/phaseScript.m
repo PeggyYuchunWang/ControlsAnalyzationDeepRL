@@ -1,4 +1,5 @@
-% plot phase graph of COM x position, velocity, acceleration
+% plot phase graph of COM x position, velocity, acceleration, can save data
+% into mat file in loop
 % By Peggy Wang
 % make/change colors for start and end
 % double check timestep and acceleration (each timestep = ? seconds)
@@ -7,6 +8,7 @@
 clc
 clear
 close all
+
 load("/Users/pegasus/Documents/AA93/DDPG_PD_3/2017_06_23_16.55.02/no_force/run_log.mat")
 pushBegin = 2500;
 pushEnd = 2550;
@@ -18,27 +20,30 @@ force = force(1,1);
 COM_x = COM(startPoint:endPoint, 1);
 startingPos = COM_x(1, 1);
 l = length(COM_x);
+
 %zero out starting position
 for a = 1:l
     COM_x(a) = COM_x(a) - startingPos;
 end
 COM_vel_x = COM_vel(startPoint:endPoint, 1);
-%moving avg filter
-windowSize = 50; 
-b = (1/windowSize)*ones(1,windowSize);
-c = 1;
-COM_vel_x = filter(b,c,COM_vel_x);
+
 COM_acc_x = zeros(l, 1);
+
 dt = 1/500; %time step (double check)
+
 %calculate acceleration by taking velocity/time
 for a = 2:l-1
     COM_acc_x(a) = (COM_vel_x(a) - COM_vel_x(a-1))/dt ;
 end
-%moving avg filter
-windowSize = 5; 
+
+%moving avg filter for acc
+windowSize = 20; 
 b = (1/windowSize)*ones(1,windowSize);
 c = 1;
 COM_acc_x = filter(b,c,COM_acc_x);
+
+footy = Feet_pos(startPoint:endPoint, 2);
+footvel = Feet_vel(startPoint:endPoint, 2);
 
 %uncomment to show graphs
 % plot3(COM_x, COM_vel_x, COM_acc_x);
@@ -49,7 +54,7 @@ COM_acc_x = filter(b,c,COM_acc_x);
 % xlabel('position')
 % ylabel('velocity')
 % zlabel('acceleration')
-% 
+
 % figure
 % subplot(3,1,1)
 % plot(COM_x)
@@ -58,7 +63,7 @@ COM_acc_x = filter(b,c,COM_acc_x);
 % subplot(3,1,3)
 % plot(COM_acc_x)
 % graph for all
-
+% 
 [fitresult, gof] = createFit(COM_x, COM_vel_x, COM_acc_x);
 
 p00 = fitresult.p00;
@@ -73,6 +78,8 @@ for i = 1:l
 end
 
 error = totalerror/l;
+
+%uncomment to save to file
 m = matfile('fitdata.mat','Writable',true);
 newp00array = p00;
 newp01array = p01;
@@ -90,5 +97,8 @@ COM_acc_x_array = cat(2, m.COM_acc_x_array, COM_acc_x);
 
 forcearray = cat(2, m.forcearray, force);
 
-save('fitdata', 'p00array', 'p01array', 'p10array', 'errorarray', 'COM_x_array', 'COM_vel_x_array', 'COM_acc_x_array', 'forcearray', '-v7.3');
+footy_array = cat(2, m.footy_array, footy);
+footvel_array = cat(2, m.footvel_array, footvel);
+
+save('fitdata', 'p00array', 'p01array', 'p10array', 'errorarray', 'COM_x_array', 'COM_vel_x_array', 'COM_acc_x_array', 'forcearray','footy_array', 'footvel_array', '-v7.3');
 %whos('-file', 'fitdata.mat')
