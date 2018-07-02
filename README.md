@@ -1,5 +1,5 @@
 # Deep Reinforcement Learning Humanoid Balance Controls Analyzation
-Deep Reinforcement Learning Control Theory Research Project at Advanced Robotics Lab in the University of Edinburgh, Scotland, UK.
+Deep Reinforcement Learning Control Theory Research Project at Advanced Robotics Lab in the University of Edinburgh, Scotland, UK. Thanks to advisor Dr. Zhibin (Alex) Li, mentors Chuanyu Yang and Kai Yuan. This project is an extension of Chuanyu's research on Deep Reinforcement Learning for Humanoid Robotic Control Balance.
 
 ## Getting Consolidated Data For All Forces
 Run `bash DDPGtrials.sh`. Make sure you have shell/bash version 4. Raw data is stored in folder `allData`. Consolidated data stored in folder `finalData`.
