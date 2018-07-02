@@ -6,3 +6,6 @@ Run `bash DDPGtrials.sh`. Make sure you have shell/bash version 4. Raw data is s
 
 ## Analyzation Scripts
 Analyzation scripts in folder "analyzeChuanyuData". plottingResults.m analyzes packaged data from single force simulation, analysisForces.m analyzes packaged data from all forces.
+
+## Simulation Scripts Changes
+Changed `run_ddpg.py` to take in optional argument `-f [force]`. Default force is 400N. Changed `logger.py` to log forces.
