@@ -5,8 +5,10 @@ clc
 clear
 close all
 
-%load("/Users/pegasus/Documents/AA93/finalData/finaldata.mat")
-load("/Users/pegasus/Documents/AA93/DDPG_PD_3/2017_06_23_16.55.02/no_force/run_log.mat")
+load("/Users/pegasus/Documents/AA93/finalData/finaldata.mat")
+%load("/Users/pegasus/Documents/AA93/DDPG_PD_3/2017_06_23_16.55.02/no_force/run_log.mat")
+
+plot(forcearray, maxFootHeight);
 
 index = 101; %400 force
 pushoffset = 50;
