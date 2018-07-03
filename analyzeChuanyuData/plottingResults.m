@@ -5,7 +5,7 @@ clc
 clear
 close all
 
-load("/Users/pegasus/Documents/AA93/allData/-400.mat")
+load("/Users/pegasus/Documents/AA93/allData/400.mat")
 
 pushoffset = 50;
 pushBegin = 2500;
@@ -14,7 +14,6 @@ startPoint = 2500;
 endPoint = 3500;   
 
 %graph for just push
-force = 400;
 COM_x = COM(startPoint:endPoint, 1);
 startingPos = COM_x(1, 1);
 l = length(COM_x);
@@ -68,7 +67,6 @@ currentfootyacc = foot_acc_y;
 %min foot tilt height (also min velocity) and index
 [v, j] = min(currentfooty);
 
-
 distFoot = abs(h-v);
 disp(distFoot);
 
@@ -80,15 +78,28 @@ end
 figure
 subplot(3,1,1)
 plot(currentx)
-title("COM x Position, Velocity, Acceleration after push")
+hold on;
+title("COM x Position, Velocity, Acceleration after push");
+push_done = scatter(pushoffset, currentx(pushoffset, 1), 30, 'cyan');
+tilt_max = scatter(i, currentx(i, 1), 30, 'magenta');
+tilt_done = scatter(j, currentx(j, 1), 30, 'green');
+legend([push_done, tilt_max, tilt_done],{'Push Done','Foot Tilt Max Height','Tilt Done'},'Location','NorthWest')
 xlabel("Time (2ms)")
 ylabel("COM x Position (m)")
 subplot(3,1,2)
 plot(currenty)
+hold on;
+scatter(pushoffset, currenty(pushoffset, 1), 30, 'cyan')
+scatter(i, currenty(i, 1), 30, 'magenta')
+scatter(j, currenty(j, 1), 30, 'green')
 xlabel("Time (2ms)")
 ylabel("Velocity (m/s)")
 subplot(3,1,3)
 plot(currentz)
+hold on;
+scatter(pushoffset, currentz(pushoffset, 1), 30, 'cyan')
+scatter(i, currentz(i, 1), 30, 'magenta')
+scatter(j, currentz(j, 1), 30, 'green')
 xlabel("Time (2ms)")
 ylabel("Acceleration (m/s^2)")
 
@@ -97,16 +108,27 @@ figure
 subplot(3,1,1)
 plot(currentfooty)
 hold on;
-scatter(pushoffset, currentfooty(pushoffset, 1), 30, 'cyan')
+push = scatter(pushoffset, currentfooty(pushoffset, 1), 30, 'cyan');
+maxtilt = scatter(i, currentfooty(i, 1), 30, 'magenta');
+donetilt = scatter(j, currentfooty(j, 1), 30, 'green');
 title("Foot y Position, Velocity, Acceleration after push")
+legend([push, maxtilt, donetilt],{'Push Done','Foot Tilt Max Height','Tilt Done'},'Location','NorthWest')
 xlabel("Time (2ms)")
 ylabel("y Position (m)")
 subplot(3,1,2)
 plot(currentfootyvel)
+hold on;
+scatter(pushoffset, currentfootyvel(pushoffset, 1), 30, 'cyan')
+scatter(i, currentfootyvel(i, 1), 30, 'magenta')
+scatter(j, currentfootyvel(j, 1), 30, 'green')
 xlabel("Time (2ms)")
 ylabel("Velocity (m/s)")
 subplot(3,1,3)
 plot(currentfootyacc)
+hold on;
+scatter(pushoffset, currentfootyacc(pushoffset, 1), 30, 'cyan')
+scatter(i, currentfootyacc(i, 1), 30, 'magenta')
+scatter(j, currentfootyacc(j, 1), 30, 'green')
 xlabel("Time (2ms)")
 ylabel("Acceleration (m/s^2)")
 
