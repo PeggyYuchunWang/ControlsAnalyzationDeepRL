@@ -5,7 +5,7 @@ cd ~/Documents/AA93/analyzeChuanyuData
 matlab -nodesktop -nosplash -r 'try; run initializeMat.m; catch; end; quit'
 
 #forces
-for value in {-600..700..10}
+for value in {620..700..10}
 do
   echo $value
   cd ~/Documents/AA93/DDPG_PD_3

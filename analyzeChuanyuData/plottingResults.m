@@ -5,7 +5,7 @@ clc
 clear
 close all
 
-load("/Users/pegasus/Documents/AA93/allData/200.mat")
+load("/Users/pegasus/Documents/AA93/allData/-400.mat")
 
 pushoffset = 50;
 pushBegin = 2500;
