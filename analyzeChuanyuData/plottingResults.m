@@ -132,7 +132,7 @@ scatter(j, currentfootyacc(j, 1), 30, 'green')
 xlabel("Time (2ms)")
 ylabel("Acceleration (m/s^2)")
 
-%graph for plane
+%graph for plane, uncomment to show graph
 [fitresult, gof] = createFit(currentx, currenty, currentz);
 
 %phase plot COM
@@ -179,4 +179,20 @@ pushend_line = plot3(currentx(pushoffset:i, 1), currenty(pushoffset:i, 1), curre
 maxtilt_line = plot3(currentx(i:j, 1), currenty(i:j, 1), currentz(i:j, 1), 'magenta');
 mintilt_line = plot3(currentx(j:end, 1), currenty(j:end, 1), currentz(j:end, 1), 'black');
 
-legend([start_line,pushend_line,maxtilt_line, mintilt_line],{'Push','Foot Tilt','Foot Down', 'Settle'},'Location','NorthWest')
+segment1x = currentx(1:pushoffset, 1);
+segment1y = currenty(1:pushoffset, 1);
+segment1z = currentz(1:pushoffset, 1);
+segment2x = currentx(pushoffset:i, 1);
+segment2y = currenty(pushoffset:i, 1);
+segment2z = currentz(pushoffset:i, 1);
+segment3x = currentx(i:j, 1);
+segment3y = currenty(i:j, 1);
+segment3z = currentz(i:j, 1);
+segment4x = currentx(j:end, 1);
+segment4y = currenty(j:end, 1);
+segment4z = currentz(j:end, 1);
+
+legend([start_line,pushend_line,maxtilt_line, mintilt_line],{'Push','Foot Tilt','Foot Down', 'Settle'},'Location','NorthWest');
+
+figure
+plot3(segment1x, segment1y, segment1z);
