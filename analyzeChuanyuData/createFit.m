@@ -1,4 +1,4 @@
-function [fitresult, gof] = createFit(COM_x, COM_vel_x, COM_acc_x)
+function [fitresult, gof] = createFit(currentx, currenty, currentz)
 %CREATEFIT1(COM_X,COM_VEL_X,COM_ACC_X)
 %  Create a fit.
 %
@@ -16,7 +16,7 @@ function [fitresult, gof] = createFit(COM_x, COM_vel_x, COM_acc_x)
 
 
 %% Fit: 'Push'.
-[xData, yData, zData] = prepareSurfaceData( COM_x, COM_vel_x, COM_acc_x );
+[xData, yData, zData] = prepareSurfaceData(currentx(50:end, 1), currenty(50:end, 1), currentz(50:end, 1));
 
 % Set up fittype and options.
 ft = fittype( 'poly11' );
@@ -25,14 +25,14 @@ ft = fittype( 'poly11' );
 [fitresult, gof] = fit( [xData, yData], zData, ft );
 
 % Plot fit with data.
-% figure( 'Name', 'Push' );
-% h = plot( fitresult, [xData, yData], zData );
-% legend( h, 'Push', 'Acceleration vs. Position, Velocity', 'Location', 'NorthEast' );
-% % Label axes
-% xlabel Position
-% ylabel Velocity
-% zlabel Acceleration
-% grid on
-% view( 0.1, -12.4 );
+figure( 'Name', 'Push' );
+h = plot( fitresult, [xData, yData], zData );
+legend( h, 'Push', 'Acceleration vs. Position, Velocity', 'Location', 'NorthEast' );
+% Label axes
+xlabel Position
+ylabel Velocity
+zlabel Acceleration
+grid on
+view( 0.1, -12.4 );
 
 
