@@ -296,6 +296,9 @@ end
 figure
 plot(circlex, circley)
 
+circlez = fitresult2.p00 + fitresult2.p10 * circlex + fitresult2.p01 * circley
+figure
+plot3(circlex, circley, circlez);
 % figure
 % plot(currenttime, Feet_pos(startPoint:endPoint, 1), 'Linewidth',2);
 % title("Foot x position");

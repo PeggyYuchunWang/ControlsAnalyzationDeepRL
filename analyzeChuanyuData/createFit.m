@@ -25,14 +25,14 @@ ft = fittype( 'poly11' );
 [fitresult, gof] = fit( [xData, yData], zData, ft );
 
 % Plot fit with data.
-figure( 'Name', 'Push' );
-h = plot( fitresult, [xData, yData], zData );
-legend( h, 'Push', 'Acceleration vs. Position, Velocity', 'Location', 'NorthEast' );
-% Label axes
-xlabel Position
-ylabel Velocity
-zlabel Acceleration
-grid on
-view( 0.1, -12.4 );
+% figure( 'Name', 'Push' );
+% h = plot( fitresult, [xData, yData], zData );
+% legend( h, 'Push', 'Acceleration vs. Position, Velocity', 'Location', 'NorthEast' );
+% % Label axes
+% xlabel Position
+% ylabel Velocity
+% zlabel Acceleration
+% grid on
+% view( 0.1, -12.4 );
 
 

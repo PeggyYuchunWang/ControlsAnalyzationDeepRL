@@ -25,14 +25,14 @@ ft = fittype( 'poly11' );
 [fitresult, gof] = fit( [xData, yData], zData, ft );
 
 % Plot fit with data.
-figure( 'Name', 'Push Segment' );
-h = plot( fitresult, [xData, yData], zData );
-legend( h, 'Push Segment', 'segment3z vs. segment3x, segment3y', 'Location', 'NorthEast' );
-% Label axes
-xlabel segment3x
-ylabel segment3y
-zlabel segment3z
-grid on
-view( 79.7, -7.6 );
+% figure( 'Name', 'Push Segment' );
+% h = plot( fitresult, [xData, yData], zData );
+% legend( h, 'Push Segment', 'segment3z vs. segment3x, segment3y', 'Location', 'NorthEast' );
+% % Label axes
+% xlabel segment3x
+% ylabel segment3y
+% zlabel segment3z
+% grid on
+% view( 79.7, -7.6 );
 
 
