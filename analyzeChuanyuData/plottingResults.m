@@ -69,7 +69,11 @@ currentfootyvel = foot_vel_y;
 currentfootyacc = foot_acc_y;
 
 %max foot tilt height and index
-[h, i] = max(currentfooty);
+h = max(currentfooty);
+
+plateau = find(currentfooty > h-.004 & currentfooty < h+.004);
+i = min(plateau);
+k = max(plateau);
 
 %min foot tilt height (also min velocity) and index
 [v, j] = min(currentfooty);
@@ -80,6 +84,7 @@ disp(distFoot);
 if distFoot < 0.005
     i = pushoffset;
     j = i;
+    k = i;
     disp("no foot tilting")
 end
 
@@ -89,9 +94,10 @@ plot(currenttime, currentx)
 hold on;
 title("COM x Position, Velocity, Acceleration after push");
 tilt_max = scatter(currenttime(i, 1), currentx(i, 1), 30, 'magenta');
+tilt_plateau = scatter(currenttime(k, 1), currentx(k, 1), 30, 'blue');
 tilt_done = scatter(currenttime(j, 1), currentx(j, 1), 30, 'green');
 push_done = scatter(currenttime(pushoffset, 1), currentx(pushoffset, 1), 30, 'cyan');
-legend([push_done, tilt_max, tilt_done],{'Push Done','Foot Tilt Max Height','Tilt Done'},'Location','NorthWest')
+legend([push_done, tilt_max, tilt_plateau, tilt_done],{'Push Done','Foot Tilt Max Height', 'Tilt Max Plateau', 'Tilt Done'},'Location','NorthWest')
 xlabel("Time (s)")
 ylabel("COM x Position (m)")
 
@@ -99,6 +105,7 @@ subplot(3,1,2)
 plot(currenttime, currenty)
 hold on;
 scatter(currenttime(i, 1), currenty(i, 1), 30, 'magenta')
+scatter(currenttime(k, 1), currenty(k, 1), 30, 'blue')
 scatter(currenttime(j, 1), currenty(j, 1), 30, 'green')
 scatter(currenttime(pushoffset, 1), currenty(pushoffset, 1), 30, 'cyan')
 xlabel("Time (s)")
@@ -108,6 +115,7 @@ subplot(3,1,3)
 plot(currenttime, currentz)
 hold on;
 scatter(currenttime(i, 1), currentz(i, 1), 30, 'magenta')
+scatter(currenttime(k, 1), currentz(k, 1), 30, 'blue')
 scatter(currenttime(j, 1), currentz(j, 1), 30, 'green')
 scatter(currenttime(pushoffset, 1), currentz(pushoffset, 1), 30, 'cyan')
 xlabel("Time (s)")
@@ -119,10 +127,11 @@ subplot(3,1,1)
 plot(currenttime, currentfooty)
 hold on;
 maxtilt = scatter(currenttime(i, 1), currentfooty(i, 1), 30, 'magenta');
+tiltplat = scatter(currenttime(k, 1), currentfooty(k, 1), 30, 'blue');
 donetilt = scatter(currenttime(j, 1), currentfooty(j, 1), 30, 'green');
 push = scatter(currenttime(pushoffset, 1), currentfooty(pushoffset, 1), 30, 'cyan');
 title("Foot y Position, Velocity, Acceleration after push")
-legend([push, maxtilt, donetilt],{'Push Done','Foot Tilt Max Height','Tilt Done'},'Location','NorthWest')
+legend([push, maxtilt, tiltplat, donetilt],{'Push Done','Foot Tilt Max Height', 'Tilt Plateau', 'Tilt Done'},'Location','NorthWest')
 xlabel("Time (s)")
 ylabel("y Position (m)")
 
@@ -130,6 +139,7 @@ subplot(3,1,2)
 plot(currenttime, currentfootyvel)
 hold on;
 scatter(currenttime(i, 1), currentfootyvel(i, 1), 30, 'magenta')
+scatter(currenttime(k, 1), currentfootyvel(k, 1), 30, 'blue')
 scatter(currenttime(j, 1), currentfootyvel(j, 1), 30, 'green')
 scatter(currenttime(pushoffset, 1), currentfootyvel(pushoffset, 1), 30, 'cyan')
 xlabel("Time (s)")
@@ -139,6 +149,7 @@ subplot(3,1,3)
 plot(currenttime, currentfootyacc)
 hold on;
 scatter(currenttime(i, 1), currentfootyacc(i, 1), 30, 'magenta')
+scatter(currenttime(k, 1), currentfootyacc(k, 1), 30, 'blue')
 scatter(currenttime(j, 1), currentfootyacc(j, 1), 30, 'green')
 scatter(currenttime(pushoffset, 1), currentfootyacc(pushoffset, 1), 30, 'cyan')
 xlabel("Time (s)")
@@ -152,6 +163,7 @@ figure
 start_dot = scatter3(currentx(1, 1), currenty(1, 1), currentz(1,1), 300, 'blue');
 hold on;
 maxtilt_dot = scatter3(currentx(i, 1), currenty(i, 1), currentz(i, 1), 300, 'magenta');
+plat_dot = scatter3(currentx(k, 1), currenty(k, 1), currentz(k, 1), 300, 'black');
 minvel_dot = scatter3(currentx(j, 1), currenty(j, 1), currentz(j, 1), 300, 'green');
 endpush_dot = scatter3(currentx(pushoffset, 1), currenty(pushoffset, 1), currentz(pushoffset,1), 300, 'cyan');
 len = length(currentx);
@@ -176,22 +188,23 @@ phase_lines = plot3(currentx, currenty, currentz,'Color',[transp,transp,transp])
 phase_scatter = scatter3(currentx, currenty, currentz,phase_dot_size,colours); 
 colorbar('Ticks',[0,1],'TickLabels',{'Start','End'});
 
-legend([phase_scatter,start_dot,end_dot, maxtilt_dot, minvel_dot, endpush_dot],{'Phase trajectory','Starting point','End Point', 'Max Tilt', 'End Foot Tilt', 'End Push'},'Location','NorthWest')
+legend([phase_scatter,start_dot,end_dot, maxtilt_dot, plat_dot, minvel_dot, endpush_dot],{'Phase trajectory','Starting point','End Point', 'Max Tilt', 'Tilt Plateau', 'End Foot Tilt', 'End Push'},'Location','NorthWest')
 hold off;
 
 figure
-start_line = plot3(currentx(1:pushoffset, 1), currenty(1:pushoffset, 1), currentz(1:pushoffset, 1), 'blue', 'Linewidth',3);
+start_line = plot3(currentx(1:pushoffset, 1), currenty(1:pushoffset, 1), currentz(1:pushoffset, 1), 'blue', 'Linewidth',2);
 title("Phase Plot for COM")
 xlabel('Position (m)')
 ylabel('Velocity (m/s)')
 zlabel('Acceleration (m/s^2)')
 grid on;
 hold on;
-pushend_line = plot3(currentx(pushoffset:i, 1), currenty(pushoffset:i, 1), currentz(pushoffset:i, 1), 'green', 'Linewidth',3);
-maxtilt_line = plot3(currentx(i:j, 1), currenty(i:j, 1), currentz(i:j, 1), 'magenta', 'Linewidth',3);
-mintilt_line = plot3(currentx(j:end, 1), currenty(j:end, 1), currentz(j:end, 1), 'black', 'Linewidth',3);
+pushend_line = plot3(currentx(pushoffset:i, 1), currenty(pushoffset:i, 1), currentz(pushoffset:i, 1), 'green', 'Linewidth',2);
+maxtilt_line = plot3(currentx(i:k, 1), currenty(i:k, 1), currentz(i:k, 1), 'cyan', 'Linewidth',2);
+tilt_plateau = plot3(currentx(k:j, 1), currenty(k:j, 1), currentz(k:j, 1), 'magenta', 'Linewidth',2);
+mintilt_line = plot3(currentx(j:end, 1), currenty(j:end, 1), currentz(j:end, 1), 'black', 'Linewidth',2);
 
-legend([start_line,pushend_line,maxtilt_line, mintilt_line],{'Push','Foot Tilt','Foot Down', 'Settle'},'Location','NorthWest');
+legend([start_line,pushend_line,maxtilt_line, tilt_plateau, mintilt_line],{'Push','Foot Tilt','Tilt Plateau', 'Foot Down', 'Settle'},'Location','NorthWest');
 
 figure
 start_line = plot3(currentx(1:pushoffset, 1), currenty(1:pushoffset, 1), currentfooty(1:pushoffset, 1), 'blue', 'Linewidth',2);
@@ -202,10 +215,11 @@ zlabel('Foot Height (m)')
 grid on;
 hold on;
 pushend_line = plot3(currentx(pushoffset:i, 1), currenty(pushoffset:i, 1), currentfooty(pushoffset:i, 1), 'green', 'Linewidth',2);
-maxtilt_line = plot3(currentx(i:j, 1), currenty(i:j, 1), currentfooty(i:j, 1), 'magenta', 'Linewidth',2);
+maxtilt_line = plot3(currentx(i:k, 1), currenty(i:k, 1), currentfooty(i:k, 1), 'cyan', 'Linewidth',2);
+tilt_plateau = plot3(currentx(k:j, 1), currenty(k:j, 1), currentfooty(k:j, 1), 'magenta', 'Linewidth',2);
 mintilt_line = plot3(currentx(j:end, 1), currenty(j:end, 1), currentfooty(j:end, 1), 'black', 'Linewidth',2);
 
-legend([start_line,pushend_line,maxtilt_line, mintilt_line],{'Push','Foot Tilt','Foot Down', 'Settle'},'Location','NorthWest');
+legend([start_line,pushend_line,maxtilt_line, tilt_plateau, mintilt_line],{'Push','Foot Tilt','Foot Down', 'Tilt Plateau','Settle'},'Location','NorthWest');
 
 %% trying to fit lines
 segment1x = currentx(1:pushoffset, 1);
@@ -214,12 +228,15 @@ segment1z = currentz(1:pushoffset, 1);
 segment2x = currentx(pushoffset:i, 1);
 segment2y = currenty(pushoffset:i, 1);
 segment2z = currentz(pushoffset:i, 1);
-segment3x = currentx(i:j, 1);
-segment3y = currenty(i:j, 1);
-segment3z = currentz(i:j, 1);
-segment4x = currentx(j:end, 1);
-segment4y = currenty(j:end, 1);
-segment4z = currentz(j:end, 1);
+segment3x = currentx(i:k, 1);
+segment3y = currenty(i:k, 1);
+segment3z = currentz(i:k, 1);
+segment4x = currentx(k:j, 1);
+segment4y = currenty(k:j, 1);
+segment4z = currentz(k:j, 1);
+segment5x = currentx(j:end, 1);
+segment5y = currenty(j:end, 1);
+segment5z = currentz(j:end, 1);
 
 figure
 plot3(segment1x, segment1y, segment1z, 'Linewidth',2);
@@ -256,7 +273,7 @@ end
 if x1 > 3
     figure
     plot3(segment3x, segment3y, segment3z, 'Linewidth',2);    
-    title("Tilt Down");
+    title("Tilt Plateau");
     xlabel("position");
     ylabel("velocity");
     zlabel("acceleration");
@@ -269,36 +286,37 @@ if x1 > 3
     disp(rmse);
 end
 
+[x1, x2] = size(segment4x);
+if x1 > 3
+    figure
+    plot3(segment4x, segment4y, segment4z, 'Linewidth',2);
+    title("Tilt Down")
+    xlabel("position")
+    ylabel("velocity")
+    zlabel("acceleration")
+    [fitresult4, gof] = createFit4(segment4x, segment4y, segment4z);
+    z4 = fitresult4.p00 + fitresult4.p10.*segment4x + fitresult4.p01*segment4y;
+    rmse = sqrt(sum((segment4z - z4).^2));
+    figure
+    plot([segment4z, z4]);
+    disp("segment4");
+    disp(rmse);
+end
+
 figure
-plot3(segment4x, segment4y, segment4z, 'Linewidth',2);
+plot3(segment5x, segment5y, segment5z, 'Linewidth',2);
 title("Settle")
 xlabel("position")
 ylabel("velocity")
 zlabel("acceleration")
-[fitresult4, gof] = createFit4(segment4x, segment4y, segment4z);
-z4 = fitresult4.p00 + fitresult4.p10.*segment4x + fitresult4.p01*segment4y;
-rmse = sqrt(sum((segment4z - z4).^2));
+[fitresult5, gof] = createFit5(segment5x, segment5y, segment5z);
+z5 = fitresult5.p00 + fitresult5.p10.*segment5x + fitresult5.p01*segment5y;
+rmse = sqrt(sum((segment5z - z5).^2));
 figure
-plot([segment4z, z4]);
-disp("segment4");
+plot([segment5z, z5]);
+disp("segment5");
 disp(rmse);
 
-circlex = zeros(201, 1);
-circley = zeros(201, 1);
-for i=1:100
-    circlex(i,1) = -1.02 + .02 * i;
-    circley(i,1) = -sqrt(1-circlex(i,1)^2);
-end
-for i=101:201
-    circlex(i,1) = 1.02 - .02 * (i-100);
-    circley(i,1) = sqrt(1-circlex(i,1)^2);
-end
-figure
-plot(circlex, circley)
-
-circlez = fitresult2.p00 + fitresult2.p10 * circlex + fitresult2.p01 * circley
-figure
-plot3(circlex, circley, circlez);
 % figure
 % plot(currenttime, Feet_pos(startPoint:endPoint, 1), 'Linewidth',2);
 % title("Foot x position");

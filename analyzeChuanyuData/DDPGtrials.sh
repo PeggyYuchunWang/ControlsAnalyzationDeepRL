@@ -5,14 +5,8 @@ cd ~/Documents/AA93/analyzeChuanyuData
 matlab -nodesktop -nosplash -r 'try; run initializeMat.m; catch; end; quit'
 
 #forces
-for value in {-670..700..10}
-do
-  echo $value
-  cd ~/Documents/AA93/DDPG_PD_3
-  python3 run_DDPG.py -f $value
-  cd ~/Documents/AA93/analyzeChuanyuData
-  matlab -nodesktop -nosplash -r 'try; run phaseScript.m; catch; end; quit'
-done
+cd ~/Documents/AA93/analyzeChuanyuData
+matlab -nodesktop -nosplash -r 'try; run phaseScript.m; catch; end; quit'
 
 cd ~/Documents/AA93/analyzeChuanyuData
 matlab -nodesktop -nosplash -r 'try; run analysisData.m; catch; end; quit'
