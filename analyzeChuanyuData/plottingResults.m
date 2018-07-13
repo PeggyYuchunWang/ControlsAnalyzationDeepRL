@@ -5,7 +5,7 @@ clc
 clear
 close all
 
-load("/Users/pegasus/Documents/AA93/allData/400.mat")
+load("../allData/400.mat")
 
 timearray = zeros(5000,1);
 for t = 1:length(timearray)
@@ -23,12 +23,8 @@ currenttime = timearray(startPoint:endPoint, 1);
 %graph for just push
 COM_x = COM(startPoint:endPoint, 1);
 startingPos = COM_x(1, 1);
+COM_x = COM_x - startingPos;
 l = length(COM_x);
-
-%zero out starting position
-for a = 1:l
-    COM_x(a) = COM_x(a) - startingPos;
-end
 
 COM_vel_x = COM_vel(startPoint:endPoint, 1);
 
@@ -47,7 +43,7 @@ for a = 2:l-1
 end
 
 %moving avg filter for acc
-windowSize = 50; 
+windowSize = 15;
 b = (1/windowSize)*ones(1,windowSize);
 c = 1;
 COM_acc_x = filter(b,c,COM_acc_x);
@@ -64,14 +60,14 @@ currentz = COM_acc_x;
 % currentfootyvel = foot_vel_y(pushoffset:end, 1);
 % currentfootyacc = foot_acc_y(pushoffset:end, 1);
 
-currentfooty = foot_y;
+currentfooty = foot_y - foot_y(1, 1);
 currentfootyvel = foot_vel_y;
 currentfootyacc = foot_acc_y;
 
 %max foot tilt height and index
 h = max(currentfooty);
 
-plateau = find(currentfooty > h-.004 & currentfooty < h+.004);
+plateau = find(currentfooty > h-.002 & currentfooty < h+.002);
 i = min(plateau);
 k = max(plateau);
 
@@ -154,9 +150,6 @@ scatter(currenttime(j, 1), currentfootyacc(j, 1), 30, 'green')
 scatter(currenttime(pushoffset, 1), currentfootyacc(pushoffset, 1), 30, 'cyan')
 xlabel("Time (s)")
 ylabel("Acceleration (m/s^2)")
-
-%graph for plane, uncomment to show graph
-%[fitresult, gof] = createFit(currentx, currenty, currentz);
 
 %phase plot COM
 figure
@@ -241,14 +234,29 @@ segment5z = currentz(j:end, 1);
 figure
 plot3(segment1x, segment1y, segment1z, 'Linewidth',2);
 title("Push segment")
-xlabel("position")
-ylabel("velocity")
-zlabel("acceleration")
+xlabel('Position (m)')
+ylabel('Velocity (m/s)')
+zlabel('Acceleration (m/s^2)')
 
 [fitresult1, gof] = createFit1(segment1x, segment1y, segment1z);
 z1 = fitresult1.p00 + fitresult1.p10.*segment1x + fitresult1.p01*segment1y;
 rmse = sqrt(sum((segment1z - z1).^2));
+
+figure
+orig1 = plot(currenttime(1:pushoffset, 1), segment1z);
+hold on;
+plane1 = plot(currenttime(1:pushoffset, 1), z1);
+title("Push Segment Error");
+xlabel("Time (s)");
+ylabel("Acceleration (m/s^2)");
+legend([orig1, plane1],{'Original', 'Plane Fit'},'Location','NorthWest');
+
 disp("segment1");
+
+disp(fitresult1.p00);
+disp(fitresult1.p10);
+disp(fitresult1.p01);
+
 disp(rmse);
 
 [x1, x2] = size(segment2x);
@@ -256,15 +264,27 @@ if x1 > 3
     figure
     plot3(segment2x, segment2y, segment2z, 'Linewidth',2);
     title("Tilt Up")
-    xlabel("position")
-    ylabel("velocity")
-    zlabel("acceleration")
+    xlabel('Position (m)')
+    ylabel('Velocity (m/s)')
+    zlabel('Acceleration (m/s^2)')
     [fitresult2, gof] = createFit2(segment2x, segment2y, segment2z);
     z2 = fitresult2.p00 + fitresult2.p10.*segment2x + fitresult2.p01*segment2y;
     rmse = sqrt(sum((segment2z - z2).^2));
+    
     figure
-    plot([segment2z, z2]);
+    orig2 = plot(currenttime(pushoffset:i, 1), segment2z);
+    hold on;
+    plane2 = plot(currenttime(pushoffset:i, 1), z2);
+    title("Foot Tilt Up Segment Error");
+    xlabel("Time (s)");
+    ylabel("Acceleration (m/s^2)");
+    legend([orig2, plane2],{'Original', 'Plane Fit'},'Location','NorthWest');
+    
     disp("segment2");
+    
+    disp(fitresult2.p00);
+    disp(fitresult2.p10);
+    disp(fitresult2.p01);
     disp(rmse);
 end
 
@@ -274,9 +294,9 @@ if x1 > 3
     figure
     plot3(segment3x, segment3y, segment3z, 'Linewidth',2);    
     title("Tilt Plateau");
-    xlabel("position");
-    ylabel("velocity");
-    zlabel("acceleration");
+    xlabel('Position (m)')
+    ylabel('Velocity (m/s)')
+    zlabel('Acceleration (m/s^2)')
     [fitresult3, gof] = createFit3(segment3x, segment3y, segment3z);
     z3 = fitresult3.p00 + fitresult3.p10.*segment3x + fitresult3.p01*segment3y;
     rmse = sqrt(sum((segment3z - z3).^2));
@@ -291,9 +311,9 @@ if x1 > 3
     figure
     plot3(segment4x, segment4y, segment4z, 'Linewidth',2);
     title("Tilt Down")
-    xlabel("position")
-    ylabel("velocity")
-    zlabel("acceleration")
+    xlabel('Position (m)')
+    ylabel('Velocity (m/s)')
+    zlabel('Acceleration (m/s^2)')
     [fitresult4, gof] = createFit4(segment4x, segment4y, segment4z);
     z4 = fitresult4.p00 + fitresult4.p10.*segment4x + fitresult4.p01*segment4y;
     rmse = sqrt(sum((segment4z - z4).^2));
@@ -306,9 +326,9 @@ end
 figure
 plot3(segment5x, segment5y, segment5z, 'Linewidth',2);
 title("Settle")
-xlabel("position")
-ylabel("velocity")
-zlabel("acceleration")
+xlabel('Position (m)')
+ylabel('Velocity (m/s)')
+zlabel('Acceleration (m/s^2)')
 [fitresult5, gof] = createFit5(segment5x, segment5y, segment5z);
 z5 = fitresult5.p00 + fitresult5.p10.*segment5x + fitresult5.p01*segment5y;
 rmse = sqrt(sum((segment5z - z5).^2));
@@ -316,6 +336,25 @@ figure
 plot([segment5z, z5]);
 disp("segment5");
 disp(rmse);
+
+%Ax + By + Cz + D = 0
+% A1 = -91.1482;
+% B1 = -8.2093;
+% C1 = -1;
+% D1 = 1.5202;
+% 
+% A2 = 556.1433;
+% B2 = 101.6383;
+% C2 = -1;
+% D2 = -19.9090;
+% 
+% figure
+% [x, y] = meshgrid(-1:0.1:1); % Generate x and y data
+% z1 = -1/C1*(A1*x + B1*y + D1); % Solve for z data
+% f1 = surf(x,y,z1, 'FaceColor', 'r') %Plot the surface
+% hold on
+% z2 = -1/C2*(A2*x + B2*y + D2); % Solve for z data
+% f2 = surf(x,y,z2, 'FaceColor', 'b')
 
 % figure
 % plot(currenttime, Feet_pos(startPoint:endPoint, 1), 'Linewidth',2);

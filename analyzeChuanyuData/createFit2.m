@@ -25,13 +25,13 @@ ft = fittype( 'poly11' );
 [fitresult, gof] = fit( [xData, yData], zData, ft );
 
 % Plot fit with data.
-% figure( 'Name', 'untitled fit 1' );
+% figure( 'Name', 'Foot Tilt Up' );
 % h = plot( fitresult, [xData, yData], zData );
-% legend( h, 'untitled fit 1', 'segment2z vs. segment2x, segment2y', 'Location', 'NorthEast' );
+% legend( h, 'Foot Tilt Up', 'position vs. velocity, acceleration', 'Location', 'NorthEast' );
 % % Label axes
-% xlabel segment2x
-% ylabel segment2y
-% zlabel segment2z
+% xlabel position
+% ylabel velocity
+% zlabel acceleration
 % grid on
 % view( -49.1, -58.0 );
 

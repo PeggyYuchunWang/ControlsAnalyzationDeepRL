@@ -5,7 +5,7 @@ clc
 clear
 close all
 
-load("/Users/pegasus/Documents/AA93/finalData/finaldata.mat")
+load("../finalData/finaldata.mat")
 
 plot(forcearray, maxFootHeight);
 title("Force vs. Max Foot Tilting Height");

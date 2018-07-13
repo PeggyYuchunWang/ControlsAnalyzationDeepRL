@@ -29,9 +29,9 @@ ft = fittype( 'poly11' );
 % h = plot( fitresult, [xData, yData], zData );
 % legend( h, 'Push Segment', 'segment1z vs. segment1x, segment1y', 'Location', 'NorthEast' );
 % % Label axes
-% xlabel segment1x
-% ylabel segment1y
-% zlabel segment1z
+% xlabel position
+% ylabel velocity
+% zlabel acceleration
 % grid on
 % view( -42.3, 6.0 );
 
