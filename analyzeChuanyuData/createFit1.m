@@ -25,14 +25,15 @@ ft = fittype( 'poly11' );
 [fitresult, gof] = fit( [xData, yData], zData, ft );
 
 % Plot fit with data.
-% figure( 'Name', 'Push Segment' );
-% h = plot( fitresult, [xData, yData], zData );
-% legend( h, 'Push Segment', 'segment1z vs. segment1x, segment1y', 'Location', 'NorthEast' );
-% % Label axes
-% xlabel position
-% ylabel velocity
-% zlabel acceleration
-% grid on
-% view( -42.3, 6.0 );
+figure( 'Name', 'Push Segment' );
+h = plot( fitresult, [xData, yData], zData );
+legend( h, 'Push Phase', 'COM x Position vs. Velocity, Acceleration', 'Location', 'NorthEast' );
+% Label axes
+title("Push Phase Affine Fit")
+xlabel("Position (m)")
+ylabel("Velocity (m/s)")
+zlabel("Acceleration (m/s^2)")
+grid on
+view( -42.3, 6.0 );
 
 

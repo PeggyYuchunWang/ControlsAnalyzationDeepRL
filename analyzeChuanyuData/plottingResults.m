@@ -93,7 +93,7 @@ tilt_max = scatter(currenttime(i, 1), currentx(i, 1), 30, 'magenta');
 tilt_plateau = scatter(currenttime(k, 1), currentx(k, 1), 30, 'blue');
 tilt_done = scatter(currenttime(j, 1), currentx(j, 1), 30, 'green');
 push_done = scatter(currenttime(pushoffset, 1), currentx(pushoffset, 1), 30, 'cyan');
-legend([push_done, tilt_max, tilt_plateau, tilt_done],{'Push Done','Foot Tilt Max Height', 'Tilt Max Plateau', 'Tilt Done'},'Location','NorthWest')
+legend([push_done, tilt_max, tilt_plateau, tilt_done],{'Push Done','Foot Tilt Max Height', 'Foot Tilt Max Plateau', 'Tilt Done'},'Location','NorthWest')
 xlabel("Time (s)")
 ylabel("COM x Position (m)")
 

@@ -25,14 +25,15 @@ ft = fittype( 'poly11' );
 [fitresult, gof] = fit( [xData, yData], zData, ft );
 
 % Plot fit with data.
-% figure( 'Name', 'untitled fit 1' );
-% h = plot( fitresult, [xData, yData], zData );
-% legend( h, 'untitled fit 1', 'segment4z vs. segment4x, segment4y', 'Location', 'NorthEast' );
-% % Label axes
-% xlabel segment4x
-% ylabel segment4y
-% zlabel segment4z
-% grid on
-% view( -47.9, -25.2 );
+figure( 'Name', 'Foot Tilt Down' );
+h = plot( fitresult, [xData, yData], zData );
+legend( h, 'Foot Tilt Down', 'COM x Position vs. Velocity, Acceleration', 'Location', 'NorthEast' );
+% Label axes
+title("Foot Tilt Down Phase Affine Fit")
+xlabel("Position (m)")
+ylabel("Velocity (m/s)")
+zlabel("Acceleration (m/s^2)")
+grid on
+view( -47.9, -25.2 );
 
 

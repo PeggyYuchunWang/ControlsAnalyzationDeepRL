@@ -25,14 +25,15 @@ ft = fittype( 'poly11' );
 [fitresult, gof] = fit( [xData, yData], zData, ft );
 
 % Plot fit with data.
-% figure( 'Name', 'untitled fit 1' );
-% h = plot( fitresult, [xData, yData], zData );
-% legend( h, 'untitled fit 1', 'segment5z vs. segment5x, segment5y', 'Location', 'NorthEast' );
-% % Label axes
-% xlabel segment5x
-% ylabel segment5y
-% zlabel segment5z
-% grid on
-% view( -23.9, -40.4 );
+figure( 'Name', 'Settling' );
+h = plot( fitresult, [xData, yData], zData );
+legend( h, 'Settling', 'COM x Position vs. Velocity, Acceleration', 'Location', 'NorthEast' );
+% Label axes
+title("Settling Phase Affine Fit")
+xlabel("Position (m)")
+ylabel("Velocity (m/s)")
+zlabel("Acceleration (m/s^2)")
+grid on
+view( -23.9, -40.4 );
 
 

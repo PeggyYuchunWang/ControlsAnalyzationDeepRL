@@ -189,7 +189,7 @@ for i=1:5
     f5 = surf(x,y,z5, 'FaceColor', 'y')
     z6 = -1/C6*(A6*x + B6*y + D6); % Solve for z data
     f6 = surf(x,y,z6, 'FaceColor', 'm')
-
+    title("Segment " + segment + " Plane Fit");
     legend([f1,f2,f3, f4, f5, f6],{'100N','200N','300N', '400N', '500N', '600N'},'Location','NorthWest');
 end
 % circlex = zeros(201, 1);

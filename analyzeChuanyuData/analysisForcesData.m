@@ -7,7 +7,9 @@ close all
 
 load("../finalData/finaldata.mat")
 
-plot(forcearray, maxFootHeight);
+notiltheight = .12;
+
+plot(forcearray, maxFootHeight - notiltheight);
 title("Force vs. Max Foot Tilting Height");
 xlabel("Force (N)");
 ylabel("Max Foot Tilting Height (m)");
@@ -15,7 +17,7 @@ ylabel("Max Foot Tilting Height (m)");
 figure
 startInd = 27;
 endInd = 138;
-plot(forcearray(1, startInd:endInd), maxFootHeight(1, startInd:endInd));
+plot(forcearray(1, startInd:endInd), maxFootHeight(1, startInd:endInd) - notiltheight);
 title("Normalized Force vs. Max Foot Tilting Height");
 xlabel("Force (N)");
 ylabel("Max Foot Tilting Height (m)");
